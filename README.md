@@ -2,4 +2,4 @@
 
 Example project: grep-like CLI app implemented in Python.
 
-See [project tutorial](https://literank.com/tutorial/9/intro) here.
+See [project tutorial](https://literank.com/project/9/intro) here.
