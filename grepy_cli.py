@@ -1,6 +1,7 @@
 import argparse
+from typing import List, Dict
 
-from grepy.grep import grep, grep_recursive, grep_count
+from grepy.grep import grep, grep_recursive, grep_count, MatchResults
 
 def main():
     parser = argparse.ArgumentParser(description='''A grep-like command-line utility from LiteRank, 
@@ -27,7 +28,7 @@ def main():
     else:
         print_result(result, args.line_number)
 
-def get_options(args):
+def get_options(args: argparse.Namespace) -> List[str]:
     options = []
     if args.ignore_case:
         options.append('i')
@@ -35,10 +36,11 @@ def get_options(args):
         options.append('v')
     return options
 
-def print_result(result, line_number_option):
+def print_result(result: Dict[str, MatchResults], line_number_option: bool):
     current_file = None
     file_count = len(result)
     for file_path, lines in result.items():
+        print(lines)
         for (line_number, line) in lines:
             if file_count > 1 and file_path != current_file:
                 current_file = file_path

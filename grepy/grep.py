@@ -1,10 +1,13 @@
 import re
+from typing import List, Dict, Tuple, Union
 import os
 
-def _filter_lines(pattern, lines, flag):
+MatchResults = List[Tuple[int, str]]
+
+def _filter_lines(pattern: Union[str, re.Pattern], lines: List[str], flag: bool) -> MatchResults:
     return [(line_number, line.strip()) for line_number, line in enumerate(lines, start=1) if bool(re.search(pattern, line)) == flag]
 
-def grep(pattern, file_path, options=None):
+def grep(pattern: Union[str, re.Pattern], file_path: str, options: List[str]=[]):
     with open(file_path, 'r') as file:
         try:
             lines = file.readlines()
@@ -23,15 +26,13 @@ def grep(pattern, file_path, options=None):
 
     return {file_path: matching_lines}
 
-def grep_count(result):
+def grep_count(result: Dict[str, MatchResults]):
     return sum([len(v) for v in result.values()])
 
-def grep_recursive(pattern, directory_path, options=None):
+def grep_recursive(pattern: Union[str, re.Pattern], directory_path: str, options: List[str]=[]):
     results = {}
-
     for root, _, files in os.walk(directory_path):
         for file in files:
             file_path = os.path.join(root, file)
             results.update(grep(pattern, file_path, options))
-
     return results
