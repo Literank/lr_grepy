@@ -9,7 +9,7 @@ def main():
             A grep-like command-line utility from LiteRank,
             see https://literank.com/tutorial/9/intro''')
     parser.add_argument('pattern', type=str, help='The pattern to search for')
-    parser.add_argument('file_path', type=str,
+    parser.add_argument('file_path', type=str, nargs="?", default="",
                         help='The path to the file to search in')
 
     # Optional arguments
@@ -31,7 +31,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.recursive:
+    if args.recursive and args.file_path != "":
         result = grep_recursive(args.pattern,
                                 args.file_path, get_options(args))
     else:

@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict, Tuple, Union
 import os
+import sys
 
 MatchResults = List[Tuple[int, str]]
 
@@ -16,21 +17,24 @@ def _filter_lines(pattern: Union[str, re.Pattern],
 
 def grep(pattern: Union[str, re.Pattern],
          file_path: str, options: List[str] = []):
-    with open(file_path, 'r') as file:
-        try:
-            lines = file.readlines()
-        except UnicodeDecodeError:  # filter out binary files
-            return {file_path: []}
+    if not file_path:  # read from stdin, usually the pipe
+        lines = sys.stdin.read().split('\n')
+    else:  # read from files
+        with open(file_path, 'r') as file:
+            try:
+                lines = file.readlines()
+            except UnicodeDecodeError:  # filter out binary files
+                return {file_path: []}
 
-        if options:
-            if 'i' in options:
-                pattern = re.compile(pattern, re.IGNORECASE)
-            if 'v' in options:
-                matching_lines = _filter_lines(pattern, lines, False)
-            else:
-                matching_lines = _filter_lines(pattern, lines, True)
+    if options:
+        if 'i' in options:
+            pattern = re.compile(pattern, re.IGNORECASE)
+        if 'v' in options:
+            matching_lines = _filter_lines(pattern, lines, False)
         else:
             matching_lines = _filter_lines(pattern, lines, True)
+    else:
+        matching_lines = _filter_lines(pattern, lines, True)
 
     return {file_path: matching_lines}
 
