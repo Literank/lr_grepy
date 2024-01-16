@@ -40,7 +40,6 @@ def print_result(result: Dict[str, MatchResults], line_number_option: bool):
     current_file = None
     file_count = len(result)
     for file_path, lines in result.items():
-        print(lines)
         for (line_number, line) in lines:
             if file_count > 1 and file_path != current_file:
                 current_file = file_path
