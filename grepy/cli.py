@@ -1,16 +1,16 @@
 import argparse
 from typing import List, Dict
 
-from grepy.grep import grep, grep_recursive, grep_count, MatchResults
+from grepy.grep import grep_recursive_m, grep_count, grep_m, MatchResults
 
 
 def main():
     parser = argparse.ArgumentParser(description='''
             A grep-like command-line utility from LiteRank,
-            see https://literank.com/tutorial/9/intro''')
+            see https://literank.com/project/9/intro''')
     parser.add_argument('pattern', type=str, help='The pattern to search for')
-    parser.add_argument('file_path', type=str, nargs="?", default="",
-                        help='The path to the file to search in')
+    parser.add_argument('file_paths', nargs="*", default=[],
+                        help='File paths to search in')
 
     # Optional arguments
     parser.add_argument('-c', '--count', action='store_true',
@@ -31,11 +31,11 @@ def main():
 
     args = parser.parse_args()
 
-    if args.recursive and args.file_path != "":
-        result = grep_recursive(args.pattern,
-                                args.file_path, get_options(args))
+    if args.recursive and args.file_paths != "":
+        result = grep_recursive_m(args.pattern,
+                                  args.file_paths, get_options(args))
     else:
-        result = grep(args.pattern, args.file_path, get_options(args))
+        result = grep_m(args.pattern, args.file_paths, get_options(args))
 
     if args.count:
         print(grep_count(result))

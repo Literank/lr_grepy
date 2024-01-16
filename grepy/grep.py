@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Tuple, Union
+from typing import List, Literal, Dict, Tuple, Union
 import os
 import sys
 
@@ -13,6 +13,18 @@ def _filter_lines(pattern: Union[str, re.Pattern],
             for line_number, line in enumerate(lines, start=1)
             if bool(re.search(pattern, line)) == flag
         ]
+
+
+def grep_m(pattern: Union[str, re.Pattern],
+           file_paths: Union[List[str], Literal['']],
+           options: List[str]):
+    "grep multiple files"
+    if not file_paths:
+        return grep(pattern, "", options)
+    result = {}
+    for file_path in file_paths:
+        result.update(grep(pattern, file_path, options))
+    return result
 
 
 def grep(pattern: Union[str, re.Pattern],
@@ -41,6 +53,16 @@ def grep(pattern: Union[str, re.Pattern],
 
 def grep_count(result: Dict[str, MatchResults]):
     return sum([len(v) for v in result.values()])
+
+
+def grep_recursive_m(pattern: Union[str, re.Pattern],
+                     file_paths: Union[List[str], Literal['']],
+                     options: List[str]):
+    "grep multiple dirs recursively"
+    result = {}
+    for file_path in file_paths:
+        result.update(grep_recursive(pattern, file_path, options))
+    return result
 
 
 def grep_recursive(pattern: Union[str, re.Pattern],
