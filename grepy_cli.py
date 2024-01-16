@@ -3,23 +3,37 @@ from typing import List, Dict
 
 from grepy.grep import grep, grep_recursive, grep_count, MatchResults
 
+
 def main():
-    parser = argparse.ArgumentParser(description='''A grep-like command-line utility from LiteRank, 
-                                     see https://literank.com/tutorial/9/intro''')
+    parser = argparse.ArgumentParser(description='''
+            A grep-like command-line utility from LiteRank,
+            see https://literank.com/tutorial/9/intro''')
     parser.add_argument('pattern', type=str, help='The pattern to search for')
-    parser.add_argument('file_path', type=str, help='The path to the file to search in')
+    parser.add_argument('file_path', type=str,
+                        help='The path to the file to search in')
 
     # Optional arguments
-    parser.add_argument('-c', '--count', action='store_true', help='Only a count of selected lines is written to standard output.')
-    parser.add_argument('-i', '--ignore-case', action='store_true', help='Perform case insensitive matching. By default, it is case sensitive.')
-    parser.add_argument('-n', '--line-number', action='store_true', help='Each output line is preceded by its relative line number in the file, starting at line 1. This option is ignored if -c is specified.')
-    parser.add_argument('-r', '--recursive', action='store_true', help='Recursively search subdirectories listed.')
-    parser.add_argument('-v', '--invert-match', action='store_true', help='Selected lines are those not matching any of the specified patterns.')
+    parser.add_argument('-c', '--count', action='store_true',
+                        help='Only a count of selected lines is written to \
+                            standard output.')
+    parser.add_argument('-i', '--ignore-case', action='store_true',
+                        help='Perform case insensitive matching. By default, \
+                            it is case sensitive.')
+    parser.add_argument('-n', '--line-number', action='store_true',
+                        help='Each output line is preceded by its relative \
+                        line number in the file, starting at line 1. This \
+                            option is ignored if -c is specified.')
+    parser.add_argument('-r', '--recursive', action='store_true',
+                        help='Recursively search subdirectories listed.')
+    parser.add_argument('-v', '--invert-match', action='store_true',
+                        help='Selected lines are those not matching any of \
+                          the specified patterns.')
 
     args = parser.parse_args()
 
     if args.recursive:
-        result = grep_recursive(args.pattern, args.file_path, get_options(args))
+        result = grep_recursive(args.pattern,
+                                args.file_path, get_options(args))
     else:
         result = grep(args.pattern, args.file_path, get_options(args))
 
@@ -28,6 +42,7 @@ def main():
     else:
         print_result(result, args.line_number)
 
+
 def get_options(args: argparse.Namespace) -> List[str]:
     options = []
     if args.ignore_case:
@@ -35,6 +50,7 @@ def get_options(args: argparse.Namespace) -> List[str]:
     if args.invert_match:
         options.append('v')
     return options
+
 
 def print_result(result: Dict[str, MatchResults], line_number_option: bool):
     current_file = None
@@ -48,6 +64,7 @@ def print_result(result: Dict[str, MatchResults], line_number_option: bool):
                 print(f"{line_number}: {line}")
             else:
                 print(line)
+
 
 if __name__ == '__main__':
     main()

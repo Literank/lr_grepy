@@ -4,14 +4,22 @@ import os
 
 MatchResults = List[Tuple[int, str]]
 
-def _filter_lines(pattern: Union[str, re.Pattern], lines: List[str], flag: bool) -> MatchResults:
-    return [(line_number, line.strip()) for line_number, line in enumerate(lines, start=1) if bool(re.search(pattern, line)) == flag]
 
-def grep(pattern: Union[str, re.Pattern], file_path: str, options: List[str]=[]):
+def _filter_lines(pattern: Union[str, re.Pattern],
+                  lines: List[str], flag: bool) -> MatchResults:
+    return [
+            (line_number, line.strip())
+            for line_number, line in enumerate(lines, start=1)
+            if bool(re.search(pattern, line)) == flag
+        ]
+
+
+def grep(pattern: Union[str, re.Pattern],
+         file_path: str, options: List[str] = []):
     with open(file_path, 'r') as file:
         try:
             lines = file.readlines()
-        except UnicodeDecodeError: # filter out binary files
+        except UnicodeDecodeError:  # filter out binary files
             return {file_path: []}
 
         if options:
@@ -26,10 +34,13 @@ def grep(pattern: Union[str, re.Pattern], file_path: str, options: List[str]=[])
 
     return {file_path: matching_lines}
 
+
 def grep_count(result: Dict[str, MatchResults]):
     return sum([len(v) for v in result.values()])
 
-def grep_recursive(pattern: Union[str, re.Pattern], directory_path: str, options: List[str]=[]):
+
+def grep_recursive(pattern: Union[str, re.Pattern],
+                   directory_path: str, options: List[str] = []):
     results = {}
     for root, _, files in os.walk(directory_path):
         for file in files:

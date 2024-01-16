@@ -5,6 +5,7 @@ import unittest
 
 from grepy.grep import grep, grep_count, grep_recursive
 
+
 class TestGrepFunctions(unittest.TestCase):
 
     def setUp(self):
@@ -54,7 +55,8 @@ class TestGrepFunctions(unittest.TestCase):
         # Create test files
         test_file1_path = os.path.join(self.test_dir, 'test_file1.txt')
         test_file2_path = os.path.join(self.test_dir, 'test_file2.txt')
-        with open(test_file1_path, 'w') as file1, open(test_file2_path, 'w') as file2:
+        with open(test_file1_path, 'w') as file1, \
+                open(test_file2_path, 'w') as file2:
             file1.write("apple\nbanana\norange\n")
             file2.write("apple\nkiwi\nbanana\n")
 
@@ -62,6 +64,7 @@ class TestGrepFunctions(unittest.TestCase):
         result = grep_recursive('apple', self.test_dir)
         count = grep_count(result)
         self.assertEqual(count, 2)
+
 
 if __name__ == '__main__':
     unittest.main()
