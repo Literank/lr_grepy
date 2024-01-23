@@ -4,6 +4,12 @@ Example project: grep-like CLI app implemented in Python.
 
 PyPI: [https://pypi.org/project/lr-grepy/](https://pypi.org/project/lr-grepy/)
 
+## Install
+
+```bash
+make install
+```
+
 ## Usage
 
 ```txt
